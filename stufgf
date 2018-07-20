@@ -1,0 +1,64 @@
+<?php
+  
+  
+  // The file
+$filename = "../../images/" . basename($_GET['img']);
+$percent = 0.1;
+$degrees = 270;
+// Content type
+
+
+$file_parts = pathinfo($filename, PATHINFO_EXTENSION);
+
+
+
+
+
+
+switch($file_parts)
+{
+    case "jpg":
+    case "JPG":
+      header('Content-Type: image/jpeg');
+
+    // Get new dimensions
+    list($width, $height) = getimagesize($filename);
+    $new_width = $width * $percent;
+    $new_height = $height * $percent;
+
+    // Resample
+    $image_p = imagecreatetruecolor($new_width, $new_height);
+    $image = imagecreatefromjpeg($filename);
+    imagecopyresampled($image_p, $image, 0, 0, 0, 0, $new_width, $new_height, $width, $height);
+
+
+    // Rotate
+    $rotate = imagerotate($image_p, $degrees, 0);
+
+    // Output
+    imagejpeg($rotate, null, 100);
+    break;
+
+    case "png":
+    $im = imagecreatefrompng($filename);
+    //$im = imagecreatefrompng("test.png");
+
+    header('Content-Type: image/png');
+
+    imagepng($im);
+    imagedestroy($im);
+    break;
+
+    case "": // Handle file extension for files ending in '.'
+    case NULL: // Handle no file extension
+    die("wrong file type");
+    break;
+}
+
+  
+  
+  
+  
+  //header('Content-Type: image/jpg');
+  //readfile("../../images/" . basename($_GET['img']));
+?>

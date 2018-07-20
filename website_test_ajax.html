@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+
+<script>
+    function myFunction() {
+    alert("The paragraph was clicked.");
+    
+    var userName = $.trim($("#username").val());
+    var passWord = $.trim($("#password").val());
+
+    $.ajax({
+      type: "POST",
+      url: "http://www.five.chat/new_user.php",
+      data: ({username: userName, password: passWord}),
+      cache: false,
+      dataType: "text",
+      success: onSuccess2
+    });
+    }
+
+    function loginUser() {
+    alert("The paragraph was clicked.");
+    
+    var userName = $.trim($("#username").val());
+    var passWord = $.trim($("#password").val());
+
+    $.ajax({
+      type: "POST",
+      url: "http://www.five.chat/login_user.php",
+      data: ({username: userName, password: passWord}),
+      cache: false,
+      dataType: "text",
+      success: onSuccess2
+    });
+    }
+    
+    
+    $(function() {
+ 
+        $("#callAjax").click(function() {
+            var name2 = $.trim($("#name2").val());
+ 
+            if(name2.length > 0)
+            {
+                $.ajax({
+                  type: "POST",
+                  url: "http://www.five.chat/create_user.php",
+                  data: ({name: name2}),
+                  cache: false,
+                  dataType: "text",
+                  success: onSuccess
+                });
+            }
+        });
+ 
+        $("#resultLog").ajaxError(function(event, request, settings, exception) {
+          $("#resultLog").html("Error Calling: " + settings.url + "<br />HTTP Code: " + request.status);
+        });
+ 
+        function onSuccess(data)
+        {
+            $("#maincon").html(data);
+        }
+        
+        $("#loginUser").click(function() {
+            alert("The paragraph was clicked.");
+            var userName = $.trim($("#username").val());
+            var passWord = $.trim($("#password").val());
+
+                $.ajax({
+                  type: "POST",
+                  url: "http://www.five.chat/login_user.php",
+                  data: ({username: userName, password: passWord}),
+                  cache: false,
+                  dataType: "text",
+                  success: loginSuccess
+                });
+
+        });
+        
+        
+         function loginSuccess(data)
+        {
+            $("#maincon").html( data);
+        }
+
+        
+
+        
+    });
+    
+
+
+ 
+
+
+</script>
+
+
+</head>
+<body>
+
+<div data-role="page" class="jqm-demos" id="panel-fixed-page1" data-title="Panel fixed positioning" data-url="panel-fixed-page1">
+    <div data-role="header" data-position="fixed">
+        <h1>Fixed header</h1>
+        <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
+        <a href="#add-form" data-icon="gear" data-iconpos="notext">Add</a>
+    </div><!-- /header -->
+    <div role="main" class="ui-content jqm-content jqm-fullwidth">
+	<h1>Panel fixed positioning</h1>
+	
+	
+	<div id="maincon"></div>
+	<div id="resultLog"></div>
+
+	<form action="upload.php" method="post" enctype="multipart/form-data" data-ajax="false">
+	    Select image to upload:
+	    <input type="file" name="fileToUpload" id="fileToUpload">
+	    <input type="submit" value="Upload Image" name="submit">
+	</form>
+	
+	<form action="upload_multi.php" method="post" enctype="multipart/form-data" data-ajax="false">
+	    Select image to upload:
+	    <input type="file" name="pictures[]" id="fileToUpload" multiple>
+	    <input type="submit" value="Upload Image" name="submit">
+	</form>
+	
+	
+	<img src="image.php?img=esc_sunrise_40A_3.jpg" />
+	
+	<p id="demo"></p>
+    </div><!-- /content -->
+    <div data-role="footer" data-position="fixed">
+        <h4>Fixed footer</h4>
+    </div><!-- /footer -->
+
+   <div data-role="panel" data-position-fixed="true" data-display="push" data-theme="b" id="nav-panel">
+        <ul data-role="listview">
+            <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                <li><a href="#panel-fixed-page2">Accordion</a></li>
+                <li><a href="#panel-fixed-page2">Ajax Navigation</a></li>
+                <li><a href="#panel-fixed-page2">Autocomplete</a></li>
+                <li><a href="#panel-fixed-page2">Buttons</a></li>
+                <li><a href="#panel-fixed-page2">Checkboxes</a></li>
+                <li><a href="#panel-fixed-page2">Collapsibles</a></li>
+                <li><a href="#panel-fixed-page2">Controlgroup</a></li>
+                <li><a href="#panel-fixed-page2">Dialogs</a></li>
+                <li><a href="#panel-fixed-page2">Fixed toolbars</a></li>
+                <li><a href="#panel-fixed-page2">Flip switch toggle</a></li>
+                <li><a href="#panel-fixed-page2">Footer toolbar</a></li>
+                <li><a href="#panel-fixed-page2">Form elements</a></li>
+                <li><a href="#panel-fixed-page2">Grids</a></li>
+                <li><a href="#panel-fixed-page2">Header toolbar</a></li>
+                <li><a href="#panel-fixed-page2">Icons</a></li>
+                <li><a href="#panel-fixed-page2">Links</a></li>
+                <li><a href="#panel-fixed-page2">Listviews</a></li>
+                <li><a href="#panel-fixed-page2">Loader overlay</a></li>
+                <li><a href="#panel-fixed-page2">Navbar</a></li>
+                <li><a href="#panel-fixed-page2">Navbar, persistent</a></li>
+                <li><a href="#panel-fixed-page2">Pages</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">Popup</a></li>
+                <li><a href="#panel-fixed-page2">Radio buttons</a></li>
+                <li><a href="#panel-fixed-page2">Select</a></li>
+                <li><a href="#panel-fixed-page2">Slider, single</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">Text inputs & textarea</a></li>
+                <li><a href="#panel-fixed-page2">Transitions</a></li>
+        </ul>
+    </div><!-- /panel -->
+    <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="add-form">
+        <form class="userform">
+            <h2>Login</h2>
+            <label for="name2">Username:</label>
+            <input type="text" name="username" id="username" value="" data-clear-btn="true" data-mini="true">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
+            <div class="ui-grid-a">
+                <div class="ui-block-a"><a href="#" id=loginUser data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Login</a></div>
+                <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
+            </div>
+            
+            <a href="#" id=callAjax data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Create New User</a>
+        </form>
+    </div><!-- /panel -->
+
+</div>
+
+ 
+
+
+
+
+
+
+
+</body>
+</html>
+

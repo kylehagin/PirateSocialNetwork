@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.css">
+<script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+<script src="https://code.jquery.com/mobile/1.4.5/jquery.mobile-1.4.5.min.js"></script>
+<script src="masonry.pkgd.js"></script>
+<script>
+
+    
+    
+    function myFunction() {
+    alert("The paragraph was clicked.");
+    
+    var userName = $.trim($("#username").val());
+    var passWord = $.trim($("#password").val());
+
+    $.ajax({
+      type: "POST",
+      url: "http://www.five.chat/new_user.php",
+      data: ({username: userName, password: passWord}),
+      cache: false,
+      dataType: "text",
+      success: onSuccess2
+    });
+    }
+
+    function loginUser() {
+    alert("The paragraph was clicked.");
+    
+    var userName = $.trim($("#username").val());
+    var passWord = $.trim($("#password").val());
+
+    $.ajax({
+      type: "POST",
+      url: "http://www.five.chat/login_user.php",
+      data: ({username: userName, password: passWord}),
+      cache: false,
+      dataType: "text",
+      success: onSuccess2
+    });
+    }
+    
+    function example(){
+	    alert('success');
+	    
+	var userName = $.trim($("#username").val());
+        var passWord = $.trim($("#password").val());
+
+		// new html5 formdata object.
+        var formData = new FormData();
+        formData.append("userName",userName);
+        formData.append("passWord",passWord);
+        formData.append("folder",'main');
+        //for each entry, add to formdata to later access via $_FILES["file" + i]
+        for (var i = 0, len = document.getElementById('file').files.length; i < len; i++) {
+            formData.append("file" + i, document.getElementById('file').files[i]);
+            
+        }
+        
+        //send formdata to server-side
+        $.ajax({
+            url: "http://www.five.chat/upload_multi.php", // our php file
+            type: "POST",
+            data: formData,
+            dataType: 'html', // we return html from our php file
+            async: true,
+            processData: false,  // tell jQuery not to process the data
+            contentType: false,   // tell jQuery not to set contentType
+            success : function(data) {
+                 alert(data);
+               
+            },
+            error : function(request) {
+               alert(request.responseText);
+		}
+	    });
+    }
+    $(function() {
+ 
+
+	var folder = "main";
+ 
+	var $grid = $('.grid').masonry({
+	  columnWidth: 100,
+	  itemSelector: '.grid-item'
+	});
+        $("#callAjax").click(function() {
+            var name2 = $.trim($("#name2").val());
+ 
+            if(name2.length > 0)
+            {
+                $.ajax({
+                  type: "POST",
+                  url: "http://www.five.chat/create_user.php",
+                  data: ({name: name2}),
+                  cache: false,
+                  dataType: "text",
+                  success: onSuccess
+                });
+            }
+        });
+ 
+        $("#resultLog").ajaxError(function(event, request, settings, exception) {
+          $("#resultLog").html("Error Calling: " + settings.url + "<br />HTTP Code: " + request.status);
+        });
+ 
+        function onSuccess(data)
+        {
+            $("#maincon").html(data);
+        }
+        
+        $("#loginUser").click(function() {
+            alert("The paragraph was clicked.");
+            var userName = $.trim($("#username").val());
+            var passWord = $.trim($("#password").val());
+
+                $.ajax({
+                  type: "POST",
+                  url: "http://www.five.chat/user_login.php",
+                  data: ({username: userName, password: passWord}),
+                  cache: false,
+                  dataType: "text",
+                  success: loginSuccess
+                });
+
+        });
+        
+        
+         function loginSuccess(data)
+        {
+           //alert(data);
+           elems = new Array();
+           elems = data.split('|');
+           
+           elems.forEach(function(string) {
+           
+           //var string = elems[0];
+           alert(string);
+           var $elemo = $(string);
+           alert($elemo);
+           
+           //var elems = [ getItemElement(), getItemElement(), getItemElement() ];
+           //var $elems = $( elems );
+           $grid.prepend( $elemo ).masonry( 'prepended', $elemo );
+           
+           });
+           
+           // $("#gridsd").html( data);
+           //   var elemsTest = data;
+             // alert(elemsTest);
+              //var elems = [ getItemElement(), getItemElement(), getItemElement() ];
+             //alert(getItemElement());
+	      // make jQuery object
+	      //var $elems = $( elems );
+	      //$grid.prepend( $elems ).masonry( 'prepended', $elems );
+        }
+
+        // create <div class="grid-item"></div>
+	function getItemElement() {
+	  var elem = document.createElement('div');
+	  var wRand = Math.random();
+	  var hRand = Math.random();
+	  var widthClass = wRand > 0.8 ? 'grid-item--width3' : wRand > 0.6 ? 'grid-item--width2' : '';
+	  var heightClass = hRand > 0.85 ? 'grid-item--height4' : hRand > 0.6 ? 'grid-item--height3' : hRand > 0.35 ? 'grid-item--height2' : '';
+	  elem.className = 'grid-item ' + widthClass + ' ' + heightClass;
+	  return elem;
+	}
+
+        
+    });
+    
+
+
+ 
+
+
+</script>
+<style>
+* { box-sizing: border-box; }
+
+body { font-family: sans-serif; }
+
+/* ---- grid ---- */
+
+.grid {
+  background: #EEE;
+  max-width: 1200px;
+}
+
+/* clearfix */
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- grid-item ---- */
+
+.grid-item {
+  width: 100px;
+  height: 120px;
+  float: left;
+  background: #D26;
+  border: 2px solid #333;
+  border-color: hsla(0, 0%, 0%, 0.5);
+  border-radius: 5px;
+}
+
+.grid-item--width2 { width: 200px; }
+.grid-item--width3 { width: 100px; }
+.grid-item--width4 { width: 300px; }
+
+.grid-item--height2 { height: 240px; }
+.grid-item--height3 { height: 240px; }
+.grid-item--height4 { height: 240px; }
+
+button {
+  font-size: 20px;
+}
+
+</style>
+
+</head>
+<body>
+
+<div data-role="page" class="jqm-demos" id="panel-fixed-page1" data-title="Panel fixed positioning" data-url="panel-fixed-page1">
+    <div data-role="header" data-position="fixed">
+        <h1>Fixed header</h1>
+        <a href="#nav-panel" data-icon="bars" data-iconpos="notext">Menu</a>
+        
+        <a href="#add-form" data-icon="gear" data-iconpos="notext">Add</a>
+    </div><!-- /header -->
+    <div role="main" class="ui-content jqm-content jqm-fullwidth">
+	
+
+	<h1>Panel fixed positioning</h1>
+	
+	
+	<div id="maincon"></div>
+	<div id="resultLog"></div>
+	
+	<div style="display: none; max-height: 0px; font-size: 0px; overflow: hidden; mso-hide: all">
+	  <form method="post" id="reg-form" autocomplete="off" enctype="multipart/form-data" data-ajax="false">
+	  
+
+	    <input type="file" name="file" id="file" onchange="example()" multiple>
+
+	  </form>
+	</div>
+	
+	<a href="#" onclick="document.getElementById('file').click(); return false;" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini"  /></a>
+
+	
+
+	<h1>Masonry - fluid columnWidth</h1>
+
+	<div class="grid" id="gridsd">
+
+	</div>
+	
+	<p id="demo"></p>
+    </div><!-- /content -->
+    <div data-role="footer" data-position="fixed">
+        <a href="#" onclick="document.getElementById('file').click(); return false;" data-icon="camera" data-iconpos="notext">filed</a>
+        <h4>Fixed footer</h4>
+    </div><!-- /footer -->
+
+   <div data-role="panel" data-position-fixed="true" data-display="push" data-theme="b" id="nav-panel">
+        <ul data-role="listview">
+            <li data-icon="delete"><a href="#" data-rel="close">Close menu</a></li>
+                <li><a href="#panel-fixed-page2">Accordion</a></li>
+                <li><a href="#panel-fixed-page2">Ajax Navigation</a></li>
+                <li><a href="#panel-fixed-page2">Autocomplete</a></li>
+                <li><a href="#panel-fixed-page2">Buttons</a></li>
+                <li><a href="#panel-fixed-page2">Checkboxes</a></li>
+                <li><a href="#panel-fixed-page2">Collapsibles</a></li>
+                <li><a href="#panel-fixed-page2">Controlgroup</a></li>
+                <li><a href="#panel-fixed-page2">Dialogs</a></li>
+                <li><a href="#panel-fixed-page2">Fixed toolbars</a></li>
+                <li><a href="#panel-fixed-page2">Flip switch toggle</a></li>
+                <li><a href="#panel-fixed-page2">Footer toolbar</a></li>
+                <li><a href="#panel-fixed-page2">Form elements</a></li>
+                <li><a href="#panel-fixed-page2">Grids</a></li>
+                <li><a href="#panel-fixed-page2">Header toolbar</a></li>
+                <li><a href="#panel-fixed-page2">Icons</a></li>
+                <li><a href="#panel-fixed-page2">Links</a></li>
+                <li><a href="#panel-fixed-page2">Listviews</a></li>
+                <li><a href="#panel-fixed-page2">Loader overlay</a></li>
+                <li><a href="#panel-fixed-page2">Navbar</a></li>
+                <li><a href="#panel-fixed-page2">Navbar, persistent</a></li>
+                <li><a href="#panel-fixed-page2">Pages</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">Popup</a></li>
+                <li><a href="#panel-fixed-page2">Radio buttons</a></li>
+                <li><a href="#panel-fixed-page2">Select</a></li>
+                <li><a href="#panel-fixed-page2">Slider, single</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">New</a></li>
+                <li><a href="#panel-fixed-page2">Text inputs & textarea</a></li>
+                <li><a href="#panel-fixed-page2">Transitions</a></li>
+        </ul>
+    </div><!-- /panel -->
+    <div data-role="panel" data-position="right" data-position-fixed="true" data-display="overlay" data-theme="a" id="add-form">
+        <form class="userform">
+            <h2>Login</h2>
+            <label for="name2">Username:</label>
+            <input type="text" name="username" id="username" value="" data-clear-btn="true" data-mini="true">
+            <label for="password">Password:</label>
+            <input type="password" name="password" id="password" value="" data-clear-btn="true" autocomplete="off" data-mini="true">
+            <div class="ui-grid-a">
+                <div class="ui-block-a"><a href="#" id=loginUser data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-b ui-mini">Login</a></div>
+                <div class="ui-block-b"><a href="#" data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Save</a></div>
+            </div>
+            
+            <a href="#" id=callAjax data-rel="close" class="ui-btn ui-shadow ui-corner-all ui-btn-a ui-mini">Create New User</a>
+        </form>
+    </div><!-- /panel -->
+
+</div>
+
+ 
+
+
+
+
+
+
+
+</body>
+</html>
+
